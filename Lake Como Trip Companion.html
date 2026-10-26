@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lake Como • Two Towns One Perfect Day | מדריך הטיול</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lake: {
+                            50: '#f0f7fa',
+                            100: '#e0eff5',
+                            200: '#b9dfec',
+                            500: '#2b7a9e',
+                            700: '#1c526d',
+                            800: '#143d52',
+                            900: '#0d2836'
+                        },
+                        terracotta: {
+                            50: '#fdf7f4',
+                            100: '#faeee8',
+                            500: '#c86d51',
+                            600: '#b0593e',
+                            700: '#8e442d'
+                        },
+                        cream: '#FDFBF7',
+                        sand: '#F4EFE6'
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'sans-serif'],
+                        serif: ['Playfair Display', 'Cormorant Garamond', 'serif'],
+                        romantic: ['Cormorant Garamond', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #F8F5F0;
+            color: #2D3748;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-romantic {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .glass-header {
+            background: rgba(253, 251, 247, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Smooth tab transition */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide scrollbars */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Checked step line-through */
+        .step-checked .step-title {
+            text-decoration: line-through;
+            color: #9CA3AF;
+        }
+        .step-checked {
+            opacity: 0.78;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-28 antialiased selection:bg-terracotta-100 selection:text-terracotta-700">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-lake-900 text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+        <i id="toast-icon" class="fas fa-check-circle text-emerald-400"></i>
+        <span id="toast-message">הודעה</span>
+    </div>
+
+    <!-- Sticky Navigation / Header Bar -->
+    <header class="sticky top-0 z-40 glass-header border-b border-stone-200/60 shadow-xs">
+        <div class="max-w-md mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-lake-700 to-terracotta-500 flex items-center justify-center text-white shadow-xs text-xs">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold text-stone-800 leading-tight">Lake Como</h1>
+                    <p class="text-[11px] text-stone-500 font-medium">וארנה & בלאג'יו • 26.10.2026</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <span id="progress-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                    <i class="fas fa-tasks ml-1"></i>0/9 הושלמו
+                </span>
+                <button onclick="openModal('quickValidationModal')" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600 transition">
+                    <i class="fas fa-bell text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Line -->
+        <div class="w-full bg-stone-200 h-1">
+            <div id="progress-bar" class="bg-gradient-to-r from-lake-500 to-terracotta-500 h-1 transition-all duration-500" style="width: 0%;"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto px-4 pt-3 space-y-4">
+
+        <!-- Romantic Hero Banner -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-lake-800 via-lake-700 to-lake-900 text-white p-5 shadow-lg">
+            <!-- Background Decorative Elements -->
+            <div class="absolute -right-12 -top-12 w-48 h-48 bg-terracotta-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -left-10 bottom-0 w-40 h-40 bg-lake-200/20 rounded-full blur-xl pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 backdrop-blur-md border border-white/20 text-white tracking-wide">
+                        <i class="fas fa-calendar-day text-amber-300"></i> יום שני • 26.10.2026
+                    </span>
+                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-terracotta-500/90 text-white font-medium shadow-xs">
+                        התחלה 10:00
+                    </span>
+                </div>
+
+                <div class="text-center my-3">
+                    <p class="font-romantic text-2xl tracking-wide text-amber-200 italic font-medium">Two Towns, One Perfect Day</p>
+                    <h2 class="text-2xl font-bold tracking-tight text-white mt-0.5">שתי עיירות. יום מושלם.</h2>
+                    <p class="text-xs text-lake-100 mt-1 font-light">נוף • סמטאות ציוריות • רגעים של יופי ושקט</p>
+                </div>
+
+                <!-- Romantic highlights pill -->
+                <div class="mt-3 bg-white/10 backdrop-blur-md rounded-2xl p-2.5 border border-white/15 flex items-center justify-between text-xs text-stone-100">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-terracotta-400">✨</span>
+                        <span>"בלי נאפולי – נשארים באגם בקצב רגוע"</span>
+                    </div>
+                    <button onclick="switchTab('bakery')" class="text-[11px] underline font-bold text-amber-200 hover:text-white">
+                        הכרטיס של מירי <i class="fas fa-chevron-left text-[9px] mr-0.5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info Ribbon -->
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="glass-card rounded-2xl p-2.5 border border-stone-200/60 shadow-xs flex flex-col items-center">
+                <span class="text-lake-700 font-bold text-sm">10:20</span>
+                <span class="text-stone-500 text-[11px] mt-0.5">רכבת לווארנה</span>
+                <span class="text-[10px] text-terracotta-600 font-semibold">לשבת משמאל 🪟</span>
+            </div>
+            <div class="glass-card rounded-2xl p-2.5 border border-stone-200/60 shadow-xs flex flex-col items-center">
+                <span class="text-lake-700 font-bold text-sm">13:20</span>
+                <span class="text-stone-500 text-[11px] mt-0.5">מעבורת לבלאג'יו</span>
+                <span class="text-[10px] text-lake-600 font-semibold">כרטיס הלוך-חזור 🎫</span>
+            </div>
+            <div class="glass-card rounded-2xl p-2.5 border border-stone-200/60 shadow-xs flex flex-col items-center">
+                <span class="text-lake-700 font-bold text-sm">16:45</span>
+                <span class="text-stone-500 text-[11px] mt-0.5">מעבורת שקיעה</span>
+                <span class="text-[10px] text-amber-700 font-semibold">Golden Hour 🌅</span>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: TIMELINE (לוח זמנים אינטראקטיבי) -->
+        <!-- ========================================== -->
+        <div id="tab-timeline" class="tab-content active space-y-3">
+            
+            <div class="flex items-center justify-between px-1">
+                <h3 class="font-bold text-stone-800 text-base flex items-center gap-2">
+                    <i class="fas fa-route text-lake-600"></i> סדר היום השלם
+                </h3>
+                <span class="text-xs text-stone-500">לחצו על תיבת הסימון לסימון יעד שהושלם</span>
+            </div>
+
+            <!-- STEP 1: Morning & Train -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-0">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(0)" id="check-0" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-stone-100 text-stone-700">09:40 - 10:20</span>
+                            <span class="text-xs text-lake-700 font-medium"><i class="fas fa-train mr-1"></i> מילאנו</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">יציאה מהמלון ורכבת מ-Milano Centrale</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            נסיעה במטרו M2 דרך תחנת Loreto ל-Milano Centrale. 
+                            לכוון לרכבת הישירה של <strong>10:20</strong> ל-<strong>Varenna-Esino</strong> (כ-64 דק').
+                        </p>
+                        
+                        <!-- Tip Box -->
+                        <div class="mt-2.5 p-2 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 flex items-start gap-2">
+                            <i class="fas fa-lightbulb text-amber-600 mt-0.5"></i>
+                            <div>
+                                <strong>טיפ זהב לנסיעה:</strong> שבו בצד שמאל של הרכבת עם כיוון הנסיעה לנוף מרהיב אל האגם כשמתקרבים לווארנה!
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 mt-2.5">
+                            <a href="https://maps.google.com/?q=Milano+Centrale" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-location-arrow text-[10px] text-lake-600"></i> מפת התחנה
+                            </a>
+                            <a href="https://www.trenord.it" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-lake-50 hover:bg-lake-100 text-lake-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-ticket-alt text-[10px]"></i> בדיקת רציף Trenord
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Varenna Part 1 -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-1">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(1)" id="check-1" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-lake-100 text-lake-800">11:24 - 13:00</span>
+                            <span class="text-xs text-emerald-700 font-medium"><i class="fas fa-camera mr-1"></i> וארנה (בוקר)</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">וארנה באור יום – סיבוב ראשון</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            יורדים מתחנת הרכבת אל האגם. אין עצירת אוכל כי שבעים מהמלון – מתמקדים בצילומים מרהיבים באור הבוקר.
+                        </p>
+
+                        <!-- Highlights List -->
+                        <div class="mt-2 space-y-1.5 text-xs text-stone-700">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">📸🌊</span>
+                                <span><strong>Passeggiata degli Innamorati:</strong> טיילת האוהבים, המעקה האדום ונוף הרים.</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">📸🌊</span>
+                                <span><strong>הנמל הישן:</strong> בתי וארנה הצבעוניים וקו המים.</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">📸🏘️</span>
+                                <span><strong>סמטאות ומדרגות האבן:</strong> קשתות אבן עם האגם בקצה.</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">📸🤍</span>
+                                <span><strong>Piazza San Giorgio:</strong> הכיכר המרכזית, חזית כנסייה בהירה ונקייה.</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2.5">
+                            <a href="https://maps.google.com/?q=Passeggiata+degli+Innamorati+Varenna" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt text-[10px] text-terracotta-500"></i> מסלול וארנה במפה
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Ferry to Bellagio -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-2">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(2)" id="check-2" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-terracotta-100 text-terracotta-800">13:00 - 13:35</span>
+                            <span class="text-xs text-lake-800 font-medium"><i class="fas fa-ship mr-1"></i> הפלגה</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">רציף המעבורות והפלגה לבלאג'יו</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            הגעה לקופה ב-<strong>13:00</strong> (20 דק' מראש). 
+                            <strong>דגש חשוב:</strong> לקנות כבר עכשיו כרטיס הלוך-חזור כדי לדלג על התור בדרך חזרה!
+                        </p>
+                        <p class="text-xs text-stone-600 mt-1">
+                            יציאה ב-<strong>13:20</strong> ➔ הגעה לבלאג'יו ב-<strong>13:35</strong>.
+                        </p>
+
+                        <div class="mt-2 p-2 rounded-xl bg-lake-50 border border-lake-200 text-[11px] text-lake-900 flex items-center gap-2">
+                            <span>📸🌊</span>
+                            <span><strong>זווית צילום:</strong> לצאת לסיפון החיצוני ולצלם את וארנה מתרחקת על רקע המים וההרים.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: Bellagio -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-3">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(3)" id="check-3" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-100 text-amber-900">13:35 - 16:25</span>
+                            <span class="text-xs text-terracotta-600 font-medium"><i class="fas fa-gem mr-1"></i> בלאג'יו (לב היום)</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">בלאג'יו – פנינת האגם</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            שיטוט קסום בסמטאות, ספוט המדרגות המפורסם, תצפית פנורמית על 3 זרועות האגם וקפה אלגנטי.
+                        </p>
+
+                        <!-- Timeline sub breakdown -->
+                        <div class="mt-2.5 bg-stone-50 rounded-xl p-2.5 space-y-1.5 text-[11px] border border-stone-200/80">
+                            <div class="flex justify-between items-center text-stone-700">
+                                <span class="font-bold">13:35 - 13:55</span>
+                                <span>הטיילת והנמל (📸🌊 סירות ומים)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-stone-700">
+                                <span class="font-bold">13:55 - 14:15</span>
+                                <span>Salita Serbelloni (📸🏘️ ספוט חובה!)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-stone-700">
+                                <span class="font-bold">14:15 - 14:35</span>
+                                <span>Basilica di San Giacomo (📸🤍 חזית אבן)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-stone-700">
+                                <span class="font-bold">14:35 - 15:30</span>
+                                <span>Punta Spartivento (📸🌊 שיא הנוף)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-stone-700">
+                                <span class="font-bold">15:30 - 16:15</span>
+                                <span>Grand Hotel Villa Serbelloni & קפה</span>
+                            </div>
+                            <div class="flex justify-between items-center text-terracotta-700 font-bold">
+                                <span>16:25</span>
+                                <span>התייצבות ברציף למעבורת</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-2.5 flex gap-2">
+                            <a href="https://maps.google.com/?q=Salita+Serbelloni+Bellagio" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-map-pin text-[10px] text-terracotta-500"></i> Salita Serbelloni
+                            </a>
+                            <a href="https://maps.google.com/?q=Punta+Spartivento+Bellagio" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-eye text-[10px] text-lake-600"></i> Punta Spartivento
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5: Sunset Ferry -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-4">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(4)" id="check-4" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-500 text-white">16:45 - 17:00</span>
+                            <span class="text-xs text-amber-800 font-medium"><i class="fas fa-sun mr-1"></i> שעת השקיעה</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">מעבורת השקיעה לבלאג'יו ➔ וארנה</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            עלייה בזמן למעבורת של <strong>16:45</strong>. תופסים מקום בחלק החיצוני של המעבורת!
+                        </p>
+                        <div class="mt-2 p-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-center gap-2">
+                            <span>🌅📸</span>
+                            <span><strong>תאורת זהב:</strong> צילום פנורמי של בלאג'יו מתרחקת והשתקפות קרני השקיעה על האגם וההרים.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 6: Varenna Part 2 & Bakery -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-5">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(5)" id="check-5" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-lake-100 text-lake-800">17:00 - 18:45</span>
+                            <span class="text-xs text-terracotta-600 font-medium"><i class="fas fa-bread-slice mr-1"></i> וארנה & מאפה</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">וארנה בדמדומים & עצירה ב-Lake Bakery</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            האורות של העיירה מתחילים להידלק. משלימים סמטאות ומדרגות שלא הספקנו, צילום בנמל הישן בערב, ומגיעים ל-<strong>Lake Bakery</strong> לפני 18:30 (פתוח עד 19:00).
+                        </p>
+
+                        <!-- Bakery Action Banner -->
+                        <div class="mt-2.5 p-2.5 rounded-xl bg-gradient-to-r from-amber-50 to-terracotta-50 border border-terracotta-200 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-terracotta-800">מה מזמינים במאפייה?</p>
+                                <p class="text-[11px] text-stone-600">פוקאצ'ה בצל • קנולי פיסטוק • מריטוצו</p>
+                            </div>
+                            <button onclick="switchTab('bakery')" class="px-3 py-1 bg-terracotta-600 text-white text-[11px] rounded-lg font-bold shadow-xs hover:bg-terracotta-700">
+                                פתח כרטיס
+                            </button>
+                        </div>
+
+                        <div class="mt-2.5">
+                            <a href="https://maps.google.com/?q=Lake+Bakery+Varenna" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-map-pin text-[10px] text-terracotta-500"></i> Lake Bakery במפה
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 7: Return to Milan -->
+            <div class="timeline-item glass-card rounded-2xl p-3.5 border border-stone-200 shadow-xs transition" id="step-card-6">
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" onchange="toggleStep(6)" id="check-6" class="mt-1 h-5 w-5 rounded-md border-stone-300 text-lake-600 focus:ring-lake-500 cursor-pointer">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-stone-800 text-white">18:45 - 20:30</span>
+                            <span class="text-xs text-stone-500 font-medium"><i class="fas fa-home mr-1"></i> חזרה למילאנו</span>
+                        </div>
+                        <h4 class="step-title font-bold text-stone-800 mt-1">עלייה לתחנה ורכבת למילאנו</h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            יוצאים מהמאפייה בעלייה מתונה של כ-12 דקות לתחנת <strong>Varenna-Esino</strong> כדי לא להילחץ.
+                        </p>
+                        <p class="text-xs text-stone-600 mt-1">
+                            רכבת ישירה מומלצת: <strong>18:35</strong> או <strong>19:20</strong> (לבדוק בזמן אמת בלוח התחנה).
+                            הגעה חזרה ל-Milano Centrale, מטרו M2 Loreto וחזרה רגועה למלון.
+                        </p>
+                        <div class="mt-2.5 flex gap-2">
+                            <a href="https://maps.google.com/?q=Varenna-Esino+train+station" target="_blank" class="px-2.5 py-1 text-[11px] rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium inline-flex items-center gap-1">
+                                <i class="fas fa-walking text-[10px] text-lake-600"></i> מסלול הליכה לתחנה
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: PHOTO SPOTS (ספוטי צילום) -->
+        <!-- ========================================== -->
+        <div id="tab-photos" class="tab-content space-y-3">
+            
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-stone-800 text-base flex items-center gap-2">
+                        <i class="fas fa-camera-retro text-terracotta-500"></i> מדריך ספוטי צילום
+                    </h3>
+                    <p class="text-xs text-stone-500">סינונים לפי סגנון צילום ורקע</p>
+                </div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-1">
+                <button onclick="filterPhotos('all')" class="photo-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-stone-800 text-white whitespace-nowrap active-filter" data-filter="all">
+                    הכל
+                </button>
+                <button onclick="filterPhotos('must')" class="photo-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-stone-200 text-stone-700 whitespace-nowrap" data-filter="must">
+                    📸 3 ספוטי חובה
+                </button>
+                <button onclick="filterPhotos('white')" class="photo-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-stone-200 text-stone-700 whitespace-nowrap" data-filter="white">
+                    🤍 רקע בהיר / לבן
+                </button>
+                <button onclick="filterPhotos('lake')" class="photo-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-stone-200 text-stone-700 whitespace-nowrap" data-filter="lake">
+                    🌊 נוף פתוח לאגם
+                </button>
+                <button onclick="filterPhotos('alleys')" class="photo-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-stone-200 text-stone-700 whitespace-nowrap" data-filter="alleys">
+                    🏘️ סמטאות ובתים
+                </button>
+            </div>
+
+            <!-- Spot 1: Passeggiata degli Innamorati -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="must lake">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-terracotta-100 text-terracotta-700">📸 ספוט חובה</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-lake-100 text-lake-700">🌊 נוף אגם</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Passeggiata degli Innamorati</h4>
+                        <p class="text-xs text-stone-500">טיילת האוהבים • וארנה</p>
+                    </div>
+                    <span class="text-xl">❤️</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    שביל עץ תלוי לאורך המצוק. המעקה האדום המפורסם, מים צלולים מתחת והרי האלפים ברקע.
+                </p>
+                <div class="mt-2.5 bg-amber-50/80 rounded-xl p-2.5 text-[11px] text-amber-900 border border-amber-200/60">
+                    <strong>💡 טיפ לצילום:</strong> לעצור ב-2-3 נקודות עיקול שבהן רואים את בתי וארנה הצבעוניים מאחור. מצוין לצילומי זוג בהליכה טבעית.
+                </div>
+            </div>
+
+            <!-- Spot 2: Salita Serbelloni -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="must alleys">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-terracotta-100 text-terracotta-700">📸 ספוט חובה</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700">🏘️ סמטאות קלאסיות</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Salita Serbelloni</h4>
+                        <p class="text-xs text-stone-500">גרם המדרגות האייקוני • בלאג'יו</p>
+                    </div>
+                    <span class="text-xl">✨</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    התמונה המפורסמת ביותר של בלאג'יו באינסטגרם. חנויות בוטיק, מדרגות אבן והאגם שמנצנץ בקצה הרחוב.
+                </p>
+                <div class="mt-2.5 bg-amber-50/80 rounded-xl p-2.5 text-[11px] text-amber-900 border border-amber-200/60">
+                    <strong>💡 טיפ לצילום:</strong> לצלם משתי זוויות: 1) מלמטה כלפי מעלה כדי לתפוס את עומק המדרגות והבתים. 2) מלמעלה למטה כשהאגם מציץ ברקע.
+                </div>
+            </div>
+
+            <!-- Spot 3: Punta Spartivento -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="must lake">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-terracotta-100 text-terracotta-700">📸 ספוט חובה</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-lake-100 text-lake-700">🌊 פנורמה 360°</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Punta Spartivento</h4>
+                        <p class="text-xs text-stone-500">קצה חצי האי • בלאג'יו</p>
+                    </div>
+                    <span class="text-xl">⛰️</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    נקודת המפגש של שלוש זרועות האגם בצורת ה-Y ההפוך. תצפית מרחיבת נשימה מול הרים נישאים ומים עמוקים.
+                </p>
+                <div class="mt-2.5 bg-amber-50/80 rounded-xl p-2.5 text-[11px] text-amber-900 border border-amber-200/60">
+                    <strong>💡 טיפ לצילום:</strong> מושלם לתמונות אנכיות (Vertical portraits). להקדיש כאן זמן לצילומי זוג עם הרקע הפתוח!
+                </div>
+            </div>
+
+            <!-- Spot 4: Piazza San Giorgio -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="white alleys">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700">🤍 רקע בהיר ונקי</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700">🏘️ כיכר היסטורית</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Piazza San Giorgio</h4>
+                        <p class="text-xs text-stone-500">הכיכר המרכזית • וארנה</p>
+                    </div>
+                    <span class="text-xl">🏛️</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    כיכר אבן פתוחה ובהירה יחסית, עם חזית הכנסייה העתיקה שמספקת רקע רגוע, אסתטי ואלגנטי ללא עומס.
+                </p>
+                <div class="mt-2.5 bg-stone-100/90 rounded-xl p-2.5 text-[11px] text-stone-800">
+                    <strong>💡 טיפ:</strong> מומלץ לבקר פעמיים – בבוקר לתאורה ישירה, ובערב (17:30) לתאורה רכה ונקייה.
+                </div>
+            </div>
+
+            <!-- Spot 5: Basilica di San Giacomo -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="white alleys">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700">🤍 רקע בהיר</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-200 text-stone-800">כנסייה רומנסקית</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Basilica di San Giacomo</h4>
+                        <p class="text-xs text-stone-500">הכנסייה והכיכר העליונה • בלאג'יו</p>
+                    </div>
+                    <span class="text-xl">⛪</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    קירות אבן חול בהירים ואדריכלות עתיקה. אם פתוח – כדאי להציץ פנימה לרגע. אם סגור, החזית מושלמת לרקע רגוע.
+                </p>
+            </div>
+
+            <!-- Spot 6: Grand Hotel Villa Serbelloni -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="white lake">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700">🤍 יוקרה ורקע בהיר</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-lake-100 text-lake-700">🌊 טיילת יוקרתית</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">Grand Hotel Villa Serbelloni</h4>
+                        <p class="text-xs text-stone-500">מלון הפאר ההיסטורי • בלאג'יו</p>
+                    </div>
+                    <span class="text-xl">🍸</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    חזית ניאו-קלאסית מפוארת בצבע קרם בהיר. הטיילת הצמודה מול המים מציעה שילוב של יוקרה אירופאית ונוף אגם.
+                </p>
+                <div class="mt-2.5 bg-stone-100/90 rounded-xl p-2.5 text-[11px] text-stone-800">
+                    <strong>💡 טיפ:</strong> אם המקום מקבל אורחים מבחוץ, ניתן להיכנס לקפה קצר או דרינק של אחה"צ.
+                </div>
+            </div>
+
+            <!-- Spot 7: Old Port & Colorful Alleys of Varenna -->
+            <div class="photo-card glass-card rounded-2xl p-4 border border-stone-200 shadow-xs" data-category="lake alleys">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-lake-100 text-lake-700">🌊 קו המים</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700">🏘️ בתים צבעוניים</span>
+                        </div>
+                        <h4 class="font-bold text-stone-800 text-base mt-1.5">הנמל הישן והסמטאות היורדות</h4>
+                        <p class="text-xs text-stone-500">Riva Grande • וארנה</p>
+                    </div>
+                    <span class="text-xl">🎨</span>
+                </div>
+                <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                    חזיתות בתים בגווני אוקר, אדום וחרדל שנושקים ישירות למי האגם. לחפש קשתות אבן או מדרגות שבהן המים מהווים את קצה הפריים.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: LAKE BAKERY & MIRI HELPER (מאפייה ומירי) -->
+        <!-- ========================================== -->
+        <div id="tab-bakery" class="tab-content space-y-3">
+            
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-stone-800 text-base flex items-center gap-2">
+                        <i class="fas fa-croissant text-terracotta-500"></i> נשנוש הערב ב-Lake Bakery
+                    </h3>
+                    <p class="text-xs text-stone-500">וארנה • להגיע לפני 18:30 (פתוח עד 19:00)</p>
+                </div>
+            </div>
+
+            <!-- Menu Recommendations Card -->
+            <div class="glass-card rounded-3xl p-4 border border-stone-200 shadow-xs">
+                <h4 class="text-xs font-bold text-stone-500 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                    <i class="fas fa-utensils text-terracotta-500"></i> מה לקחת במאפייה?
+                </h4>
+                
+                <div class="grid grid-cols-2 gap-2.5">
+                    <!-- Savory -->
+                    <div class="bg-amber-50/70 rounded-2xl p-3 border border-amber-200/60">
+                        <span class="text-xs font-bold text-amber-900 block">🍕 למלוח:</span>
+                        <h5 class="font-bold text-stone-800 text-sm mt-1">פוקאצ'ה בצל</h5>
+                        <p class="text-[11px] text-stone-600 mt-0.5">פריכה וטרייה, קלאסיקה איטלקית פשוטה וממכרת.</p>
+                    </div>
+
+                    <!-- Sweet -->
+                    <div class="bg-rose-50/70 rounded-2xl p-3 border border-rose-200/60">
+                        <span class="text-xs font-bold text-rose-900 block">🧁 למתוק:</span>
+                        <h5 class="font-bold text-stone-800 text-sm mt-1">קנולי פיסטוק או מריטוצו</h5>
+                        <p class="text-[11px] text-stone-600 mt-0.5">קנולי פריך במילוי פיסטוק עשיר או לחמניית מריטוצו רכה עם קרם.</p>
+                    </div>
+                </div>
+
+                <div class="mt-3 p-2 bg-stone-100/80 rounded-xl text-center text-xs text-stone-700 font-medium">
+                    ✨ <strong>המלצה חמה:</strong> לחלוק פריט אחד מלוח ופריט אחד מתוק לפני העלייה לרכבת!
+                </div>
+            </div>
+
+            <!-- SPECIAL CARD FOR MIRI: Pork / Lard Checker -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-terracotta-600 via-terracotta-500 to-amber-700 text-white p-5 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md border border-white/25">
+                        כרטיס הצגה למוכר למירי 🤍
+                    </span>
+                    <span class="text-xs bg-amber-400 text-stone-900 px-2 py-0.5 rounded-full font-bold">
+                        בדיקת רכיבים
+                    </span>
+                </div>
+
+                <p class="text-xs text-white/90 mb-2">
+                    הראו את המשפט הבא למוכר במאפייה כדי לוודא שאין חזיר, שומן חזיר (strutto) או נקניקים:
+                </p>
+
+                <!-- Big Italian Phrase Box -->
+                <div class="bg-white text-stone-900 rounded-2xl p-4 my-3 shadow-inner text-center">
+                    <p class="font-romantic text-xl font-bold italic tracking-wide text-stone-900 leading-snug" id="italian-phrase">
+                        “Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?”
+                    </p>
+                    <p class="text-xs text-stone-500 mt-2 font-sans">
+                        (תרגום: איננו אוכלים חזיר. האם זה מכיל פרושוטו, סלאמי או שומן חזיר?)
+                    </p>
+                </div>
+
+                <!-- Action Buttons: TTS & Copy -->
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <button onclick="speakItalianPhrase()" class="py-2.5 px-3 rounded-xl bg-white/15 hover:bg-white/25 active:bg-white/30 backdrop-blur-md border border-white/30 text-white text-xs font-bold flex items-center justify-center gap-2 transition">
+                        <i class="fas fa-volume-up text-amber-300"></i> השמע באיטלקית
+                    </button>
+                    <button onclick="copyItalianPhrase()" class="py-2.5 px-3 rounded-xl bg-white text-terracotta-700 hover:bg-stone-50 active:bg-stone-100 text-xs font-bold flex items-center justify-center gap-2 transition shadow-xs">
+                        <i class="fas fa-copy"></i> העתק משפט
+                    </button>
+                </div>
+
+                <button onclick="openFullscreenCard()" class="w-full mt-2 py-2 rounded-xl bg-black/20 hover:bg-black/30 text-white/90 text-[11px] font-medium flex items-center justify-center gap-1.5 transition">
+                    <i class="fas fa-expand text-[10px]"></i> הצג כרטיס במסך מלא מול המוכר
+                </button>
+            </div>
+
+            <!-- Notes & Timing -->
+            <div class="glass-card rounded-2xl p-3.5 border border-stone-200 text-xs text-stone-600 space-y-1.5">
+                <div class="flex items-center gap-2 font-bold text-stone-800">
+                    <i class="fas fa-clock text-lake-600"></i> זמנים שכדאי לזכור בערב:
+                </div>
+                <p>• <strong>18:15 - 18:30:</strong> מסיימים את המאפה בנחת.</p>
+                <p>• <strong>18:30 - 18:45:</strong> יוצאים לעלייה לתחנת Varenna-Esino (עלייה מתונה של כ-12 דקות, כדאי לא למהר).</p>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: VALIDATION & NAVIGATION (אימות וניווט) -->
+        <!-- ========================================== -->
+        <div id="tab-nav" class="tab-content space-y-3">
+            
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-stone-800 text-base flex items-center gap-2">
+                        <i class="fas fa-shield-alt text-lake-600"></i> אימות בזמן אמת & קישורים
+                    </h3>
+                    <p class="text-xs text-stone-500">נקודות קריטיות לבדיקה במהלך היום</p>
+                </div>
+            </div>
+
+            <!-- Checklist of Real-Time Checks -->
+            <div class="glass-card rounded-2xl p-4 border border-stone-200 shadow-xs space-y-2.5">
+                <h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                    <i class="fas fa-clipboard-check text-emerald-600 ml-1"></i> נקודות לאימות בזמן אמת
+                </h4>
+
+                <label class="flex items-start gap-2.5 p-2 rounded-xl bg-stone-50 border border-stone-200/70 text-xs cursor-pointer">
+                    <input type="checkbox" class="mt-0.5 rounded text-lake-600 focus:ring-0">
+                    <div>
+                        <span class="font-bold text-stone-800">רכבת 10:20 מ-Milano Centrale:</span>
+                        <p class="text-stone-500 text-[11px]">לוודא מספר רציף (Binario) על הלוח האלקטרוני בתחנה.</p>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 p-2 rounded-xl bg-stone-50 border border-stone-200/70 text-xs cursor-pointer">
+                    <input type="checkbox" class="mt-0.5 rounded text-lake-600 focus:ring-0">
+                    <div>
+                        <span class="font-bold text-stone-800">מעבורת 13:20 מווארנה לבלאג'יו:</span>
+                        <p class="text-stone-500 text-[11px]">לוודא שהמעבורת יוצאת כסדרה ולקנות כרטיס הלוך-חזור.</p>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 p-2 rounded-xl bg-stone-50 border border-stone-200/70 text-xs cursor-pointer">
+                    <input type="checkbox" class="mt-0.5 rounded text-lake-600 focus:ring-0">
+                    <div>
+                        <span class="font-bold text-stone-800">Basilica di San Giacomo בבלאג'יו:</span>
+                        <p class="text-stone-500 text-[11px]">לבדוק האם פתוחה. אם סגורה, להמשיך ישירות לפונטה ספרטיוונטו ולבדוק שוב בחזור.</p>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 p-2 rounded-xl bg-stone-50 border border-stone-200/70 text-xs cursor-pointer">
+                    <input type="checkbox" class="mt-0.5 rounded text-lake-600 focus:ring-0">
+                    <div>
+                        <span class="font-bold text-stone-800">מעבורת 16:45 מבלאג'יו לווארנה:</span>
+                        <p class="text-stone-500 text-[11px]">להתייצב ברציף ב-16:25 לתפוס מקום חיצוני לתמונות השקיעה.</p>
+                    </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 p-2 rounded-xl bg-stone-50 border border-stone-200/70 text-xs cursor-pointer">
+                    <input type="checkbox" class="mt-0.5 rounded text-lake-600 focus:ring-0">
+                    <div>
+                        <span class="font-bold text-stone-800">רכבת ערב מ-Varenna-Esino למילאנו:</span>
+                        <p class="text-stone-500 text-[11px]">בדיקה ב-Trenord של שעת הרכבת הישירה (18:35 או 19:20).</p>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Direct Launch Links (Google Maps & Transport) -->
+            <div class="glass-card rounded-2xl p-4 border border-stone-200 shadow-xs">
+                <h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2.5">
+                    <i class="fas fa-map-marked-alt text-terracotta-500 ml-1"></i> קיצורי דרך למפות ומפעילים
+                </h4>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <a href="https://maps.google.com/?q=Milano+Centrale" target="_blank" class="p-2.5 rounded-xl bg-stone-50 hover:bg-stone-100 border border-stone-200 flex items-center gap-2 font-medium text-stone-700">
+                        <i class="fas fa-subway text-lake-600"></i> Milano Centrale
+                    </a>
+
+                    <a href="https://maps.google.com/?q=Varenna-Esino" target="_blank" class="p-2.5 rounded-xl bg-stone-50 hover:bg-stone-100 border border-stone-200 flex items-center gap-2 font-medium text-stone-700">
+                        <i class="fas fa-train text-lake-600"></i> תחנת Varenna-Esino
+                    </a>
+
+                    <a href="https://maps.google.com/?q=Varenna+ferry+dock" target="_blank" class="p-2.5 rounded-xl bg-stone-50 hover:bg-stone-100 border border-stone-200 flex items-center gap-2 font-medium text-stone-700">
+                        <i class="fas fa-ship text-terracotta-500"></i> רציף מעבורות וארנה
+                    </a>
+
+                    <a href="https://maps.google.com/?q=Bellagio+ferry+dock" target="_blank" class="p-2.5 rounded-xl bg-stone-50 hover:bg-stone-100 border border-stone-200 flex items-center gap-2 font-medium text-stone-700">
+                        <i class="fas fa-ship text-terracotta-500"></i> רציף מעבורות בלאג'יו
+                    </a>
+
+                    <a href="https://www.navigazionelaghi.it" target="_blank" class="p-2.5 rounded-xl bg-lake-50 hover:bg-lake-100 border border-lake-200 flex items-center gap-2 font-medium text-lake-800">
+                        <i class="fas fa-clock text-lake-700"></i> לוח Navigazione Laghi
+                    </a>
+
+                    <a href="https://www.trenord.it" target="_blank" class="p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 flex items-center gap-2 font-medium text-emerald-800">
+                        <i class="fas fa-ticket-alt text-emerald-600"></i> לוחות Trenord
+                    </a>
+                </div>
+            </div>
+
+            <!-- Packing / Day Reminder -->
+            <div class="glass-card rounded-2xl p-3.5 border border-amber-200 bg-amber-50/50 text-xs text-amber-900 space-y-1">
+                <div class="font-bold flex items-center gap-1.5 text-amber-950">
+                    <i class="fas fa-heart text-terracotta-500"></i> תזכורת רומנטית ליום המושלם:
+                </div>
+                <p>מטען נייד (Powerbank) טעון לצילומים • שכבה חמה לשיט על המעבורת בשקיעה • נעלי הליכה נוחות למדרגות האבן של בלאג'יו ו-וארנה.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (Mobile Native Style) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 glass-header border-t border-stone-200/80 shadow-lg">
+        <div class="max-w-md mx-auto px-2 py-1 flex justify-around items-center">
+            
+            <button onclick="switchTab('timeline')" id="btn-tab-timeline" class="nav-btn flex flex-col items-center py-1 px-3 text-lake-800 transition active">
+                <i class="fas fa-calendar-alt text-base"></i>
+                <span class="text-[10px] font-bold mt-1">לו״ז היום</span>
+            </button>
+
+            <button onclick="switchTab('photos')" id="btn-tab-photos" class="nav-btn flex flex-col items-center py-1 px-3 text-stone-400 hover:text-stone-700 transition">
+                <i class="fas fa-camera text-base"></i>
+                <span class="text-[10px] font-bold mt-1">צילום</span>
+            </button>
+
+            <button onclick="switchTab('bakery')" id="btn-tab-bakery" class="nav-btn flex flex-col items-center py-1 px-3 text-stone-400 hover:text-stone-700 transition">
+                <i class="fas fa-cookie-bite text-base"></i>
+                <span class="text-[10px] font-bold mt-1">מירי & מאפה</span>
+            </button>
+
+            <button onclick="switchTab('nav')" id="btn-tab-nav" class="nav-btn flex flex-col items-center py-1 px-3 text-stone-400 hover:text-stone-700 transition">
+                <i class="fas fa-compass text-base"></i>
+                <span class="text-[10px] font-bold mt-1">אימות וניווט</span>
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- Fullscreen Miri Card Modal -->
+    <div id="fullscreenMiriModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-white rounded-3xl p-6 text-center shadow-2xl relative animate-scaleUp">
+            <button onclick="closeModal('fullscreenMiriModal')" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center hover:bg-stone-200">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="w-12 h-12 rounded-full bg-terracotta-100 text-terracotta-600 flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fas fa-hand-holding-heart"></i>
+            </div>
+
+            <span class="text-xs font-bold text-terracotta-600 uppercase tracking-widest">הצגה למוכר במאפייה</span>
+            
+            <div class="my-6 p-4 bg-stone-50 rounded-2xl border-2 border-dashed border-stone-300">
+                <p class="font-romantic text-2xl font-bold italic text-stone-900 leading-relaxed" dir="ltr">
+                    “Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?”
+                </p>
+            </div>
+
+            <p class="text-xs text-stone-500 mb-5">
+                איננו אוכלים חזיר. האם זה מכיל פרושוטו, סלאמי או שומן חזיר?
+            </p>
+
+            <div class="flex gap-2">
+                <button onclick="speakItalianPhrase()" class="flex-1 py-3 bg-terracotta-600 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-md hover:bg-terracotta-700">
+                    <i class="fas fa-volume-up"></i> השמע קולית
+                </button>
+                <button onclick="closeModal('fullscreenMiriModal')" class="flex-1 py-3 bg-stone-100 text-stone-700 font-bold text-xs rounded-xl hover:bg-stone-200">
+                    סגור
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Validation Modal -->
+    <div id="quickValidationModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl relative">
+            <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                <h3 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                    <i class="fas fa-bell text-amber-500"></i> סטטוס יום הטיול
+                </h3>
+                <button onclick="closeModal('quickValidationModal')" class="w-7 h-7 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center text-xs">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="py-4 space-y-2.5 text-xs">
+                <div class="p-2.5 rounded-xl bg-lake-50 text-lake-900 flex justify-between items-center">
+                    <span>רכבת יציאה:</span>
+                    <strong class="font-bold">10:20 (Centrale)</strong>
+                </div>
+                <div class="p-2.5 rounded-xl bg-terracotta-50 text-terracotta-900 flex justify-between items-center">
+                    <span>מעבורת לבלאג'יו:</span>
+                    <strong class="font-bold">13:20 (להגיע ב-13:00)</strong>
+                </div>
+                <div class="p-2.5 rounded-xl bg-amber-50 text-amber-900 flex justify-between items-center">
+                    <span>מעבורת חזור (שקיעה):</span>
+                    <strong class="font-bold">16:45 (להגיע ב-16:25)</strong>
+                </div>
+                <div class="p-2.5 rounded-xl bg-stone-100 text-stone-800 flex justify-between items-center">
+                    <span>מאפייה בווארנה:</span>
+                    <strong class="font-bold">לפני 18:30</strong>
+                </div>
+            </div>
+
+            <button onclick="closeModal('quickValidationModal')" class="w-full py-2.5 bg-stone-800 text-white font-bold text-xs rounded-xl">
+                הבנתי, תודה!
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // State management
+        const TOTAL_STEPS = 7;
+        let checkedSteps = JSON.parse(localStorage.getItem('lake_como_checked_steps') || '[]');
+
+        // Initialize state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            applySavedSteps();
+            updateProgress();
+        });
+
+        // Tab Switching
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            // Update bottom nav active state
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-lake-800');
+                btn.classList.add('text-stone-400');
+            });
+
+            const activeBtn = document.getElementById('btn-tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-stone-400');
+                activeBtn.classList.add('text-lake-800');
+            }
+
+            // Scroll top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Step Checkbox
+        function toggleStep(index) {
+            const checkbox = document.getElementById('check-' + index);
+            const card = document.getElementById('step-card-' + index);
+
+            if (checkbox.checked) {
+                if (!checkedSteps.includes(index)) checkedSteps.push(index);
+                card.classList.add('step-checked');
+                showToast('יעד סומן בהצלחה! ✨', 'fa-check');
+            } else {
+                checkedSteps = checkedSteps.filter(i => i !== index);
+                card.classList.remove('step-checked');
+            }
+
+            localStorage.setItem('lake_como_checked_steps', JSON.stringify(checkedSteps));
+            updateProgress();
+        }
+
+        function applySavedSteps() {
+            checkedSteps.forEach(index => {
+                const checkbox = document.getElementById('check-' + index);
+                const card = document.getElementById('step-card-' + index);
+                if (checkbox) checkbox.checked = true;
+                if (card) card.classList.add('step-checked');
+            });
+        }
+
+        function updateProgress() {
+            const count = checkedSteps.length;
+            const percentage = Math.round((count / TOTAL_STEPS) * 100);
+            
+            const badge = document.getElementById('progress-badge');
+            const bar = document.getElementById('progress-bar');
+
+            if (badge) badge.innerHTML = `<i class="fas fa-check mr-1"></i>${count}/${TOTAL_STEPS} הושלמו`;
+            if (bar) bar.style.width = percentage + '%';
+        }
+
+        // Photo Filters
+        function filterPhotos(category) {
+            const cards = document.querySelectorAll('.photo-card');
+            const buttons = document.querySelectorAll('.photo-filter-btn');
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.remove('bg-stone-200', 'text-stone-700');
+                    btn.classList.add('bg-stone-800', 'text-white');
+                } else {
+                    btn.classList.remove('bg-stone-800', 'text-white');
+                    btn.classList.add('bg-stone-200', 'text-stone-700');
+                }
+            });
+
+            cards.forEach(card => {
+                const cats = card.getAttribute('data-category') || '';
+                if (category === 'all' || cats.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Italian TTS & Copy for Miri
+        function speakItalianPhrase() {
+            const phrase = "Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?";
+            
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(phrase);
+                utterance.lang = 'it-IT';
+                utterance.rate = 0.88; // Slightly slower for clarity
+                utterance.pitch = 1.0;
+
+                // Attempt finding Italian voice
+                const voices = window.speechSynthesis.getVoices();
+                const italianVoice = voices.find(v => v.lang.startsWith('it'));
+                if (italianVoice) utterance.voice = italianVoice;
+
+                window.speechSynthesis.speak(utterance);
+                showToast('משמיע באיטלקית... 🔊', 'fa-volume-up');
+            } else {
+                showToast('הקראה קולית אינה נתמכת במכשיר זה', 'fa-exclamation-circle');
+            }
+        }
+
+        function copyItalianPhrase() {
+            const text = "Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?";
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand("copy");
+                showToast("המשפט הועתק ללוח! 📋", "fa-check");
+            } catch (err) {
+                showToast("לא ניתן להעתיק אוטומטית", "fa-exclamation-circle");
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // Modals
+        function openFullscreenCard() {
+            openModal('fullscreenMiriModal');
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Toast Helper
+        function showToast(message, iconClass = 'fa-check-circle') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            if (!toast) return;
+
+            toastMsg.innerText = message;
+            toastIcon.className = `fas ${iconClass} text-amber-300`;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
