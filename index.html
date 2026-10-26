@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Lake Como • Varenna & Bellagio</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1b384c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Lake Como">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --como-blue: #1b384c;
+      --como-deep: #0f222e;
+      --terracotta: #c86343;
+      --terracotta-soft: #f7ede8;
+      --accent-gold: #d4a373;
+      --bg-cream: #faf7f2;
+      --card-bg: #ffffff;
+      --text-main: #2b2b2b;
+      --text-muted: #6c757d;
+      --border-soft: #eae3d9;
+      --success: #2a9d8f;
+      --warning: #e76f51;
+      --shadow-sm: 0 4px 14px rgba(27, 56, 76, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Assistant', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 95px;
+      user-select: none;
+    }
+
+    header {
+      background: linear-gradient(145deg, var(--como-deep), var(--como-blue));
+      color: #fff;
+      padding: 30px 20px 22px;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 8px 24px rgba(15, 34, 46, 0.25);
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      color: #f1faee;
+    }
+
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    /* PWA Install Banner */
+    .install-bar {
+      display: none;
+      background: #fff;
+      border: 1px solid var(--accent-gold);
+      border-radius: 14px;
+      margin: 14px 16px 0;
+      padding: 10px 14px;
+      box-shadow: var(--shadow-sm);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .install-bar.visible {
+      display: flex;
+    }
+    .install-btn {
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    /* Status Bar */
+    .live-status-bar {
+      margin: 14px 16px 0;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--como-blue);
+      background: #edf4f8;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .loc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .active-stage-card {
+      background: var(--terracotta-soft);
+      border: 1px solid rgba(200, 99, 67, 0.25);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .active-stage-label {
+      font-size: 0.74rem;
+      color: var(--terracotta);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .active-stage-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--como-deep);
+    }
+
+    .delay-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+    .delay-ok { background: #e8f5e9; color: #2e7d32; }
+    .delay-warn { background: #ffebee; color: var(--warning); }
+
+    /* Tabs */
+    .tabs-nav {
+      display: flex;
+      background: #eae4da;
+      margin: 14px 16px 12px;
+      padding: 4px;
+      border-radius: 14px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px 4px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--como-blue);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Content Area */
+    .content-pane {
+      display: none;
+      padding: 0 16px;
+    }
+
+    .content-pane.active {
+      display: block;
+    }
+
+    /* Timeline Cards */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: transform 0.15s, border-color 0.2s;
+    }
+
+    .timeline-item.current-step {
+      border: 2px solid var(--terracotta);
+      background: #fffdfa;
+    }
+
+    .timeline-item.completed {
+      opacity: 0.58;
+      background: #f8f8f8;
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .item-time {
+      font-weight: 700;
+      color: var(--terracotta);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .item-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      cursor: pointer;
+      accent-color: var(--como-blue);
+    }
+
+    .item-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--como-deep);
+      margin-bottom: 6px;
+    }
+
+    .item-desc {
+      font-size: 0.88rem;
+      color: #4a4a4a;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      background: #f1f7fa;
+      border-right: 3px solid var(--como-blue);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--como-deep);
+      margin-top: 8px;
+    }
+
+    /* Photography Section */
+    .photo-filter {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .photo-filter::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .filter-chip.active {
+      background: var(--como-blue);
+      color: #fff;
+      border-color: var(--como-blue);
+    }
+
+    .photo-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      border: 1px solid var(--border-soft);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .spot-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .badge-must { background: #ffe8e8; color: #d90429; }
+    .badge-white { background: #f0f0f0; color: #444; }
+    .badge-view { background: #e0f2fe; color: #0284c7; }
+
+    /* Miri & Bakery Card */
+    .italian-card {
+      background: #ffffff;
+      border: 2px solid var(--accent-gold);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .phrase-it {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--como-deep);
+      direction: ltr;
+      margin: 12px 0;
+      padding: 12px;
+      background: #faf6f0;
+      border-radius: 10px;
+      user-select: all;
+    }
+
+    .action-btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .pill-btn {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-sound { background: var(--como-blue); color: #fff; }
+    .btn-copy { background: #eae3d9; color: var(--text-main); }
+
+    /* Verification Quick Grid */
+    .verify-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .verify-item {
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+    .verify-item a {
+      text-decoration: none;
+      color: var(--como-blue);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Bottom Nav */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: #ffffff;
+      border-top: 1px solid #e4decb;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+    }
+
+    .nav-link.active {
+      color: var(--terracotta);
+    }
+
+    .nav-link svg {
+      width: 22px;
+      height: 22px;
+      margin-bottom: 2px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-badge">יום שני 26.10.2026 • טיול זוגי</div>
+    <h1 class="header-title">Varenna & Bellagio</h1>
+    <div class="header-subtitle">שתי עיירות. יום מושלם. רגעי יופי ורוגע</div>
+  </header>
+
+  <!-- PWA Install Banner -->
+  <div id="installBanner" class="install-bar">
+    <div>
+      <strong style="font-size:0.85rem; color:var(--como-deep);">התקנת אפליקציה למכשיר</strong>
+      <div style="font-size:0.75rem; color:var(--text-muted);">שימוש מלא ללא צורך באינטרנט</div>
+    </div>
+    <button id="installBtn" class="install-btn">התקן עכשיו</button>
+  </div>
+
+  <!-- Live Status & GPS Tracker -->
+  <div class="live-status-bar">
+    <div class="status-row">
+      <div class="time-badge">
+        <span>🕒</span>
+        <span id="clock-display">--:--</span>
+      </div>
+      <div class="loc-badge" onclick="requestUserLocation()">
+        <span>📍</span>
+        <span id="loc-display">לחץ לזיהוי מיקום</span>
+      </div>
+    </div>
+    <div class="active-stage-card">
+      <div class="active-stage-label">
+        <span>שלב פעיל עכשיו לפי השעה</span>
+        <span id="delay-indicator" class="delay-pill delay-ok">עומדים בזמנים</span>
+      </div>
+      <div id="current-stage-title" class="active-stage-title">טוען נתונים...</div>
+    </div>
+  </div>
+
+  <!-- Internal Tabs -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('itinerary')">לוח זמנים</button>
+    <button class="tab-btn" onclick="switchTab('photos')">ספוטי צילום</button>
+    <button class="tab-btn" onclick="switchTab('bakery')">מירי ומאפה</button>
+    <button class="tab-btn" onclick="switchTab('verify')">אימות וניווט</button>
+  </div>
+
+  <!-- TAB 1: ITINERARY -->
+  <div id="tab-itinerary" class="content-pane active">
+    <div class="timeline">
+
+      <!-- 09:00 - 10:00 -->
+      <div class="timeline-item" data-start="09:00" data-end="10:00">
+        <div class="timeline-header">
+          <div class="item-time">09:00 עד 10:00 | ארוחת בוקר</div>
+          <input type="checkbox" class="item-checkbox" id="step-0" onchange="saveProgress()">
+        </div>
+        <div class="item-title">ארוחת בוקר והתארגנות במלון</div>
+        <div class="item-desc">אוכלים בנחת במלון ומתכוננים ליום מלא באגם. יציאה מתוכננת לקראת 10:00.</div>
+      </div>
+
+      <!-- 10:00 - 10:20 -->
+      <div class="timeline-item" data-start="10:00" data-end="10:20">
+        <div class="timeline-header">
+          <div class="item-time">10:00 | יציאה לתחנה</div>
+          <input type="checkbox" class="item-checkbox" id="step-1" onchange="saveProgress()">
+        </div>
+        <div class="item-title">יציאה לכיוון Milano Centrale</div>
+        <div class="item-desc">לצאת ישירות לתחנה לקראת הרכבת הישירה של 10:20 לווארנה. אם מתעכבים, לבדוק מיד את הרכבת הבאה באפליקציית Trenord.</div>
+      </div>
+
+      <!-- 10:20 - 11:24 -->
+      <div class="timeline-item" data-start="10:20" data-end="11:24">
+        <div class="timeline-header">
+          <div class="item-time">10:20 עד 11:24 | רכבת</div>
+          <input type="checkbox" class="item-checkbox" id="step-2" onchange="saveProgress()">
+        </div>
+        <div class="item-title">רכבת ישירה ל-Varenna-Esino</div>
+        <div class="item-desc">משך נסיעה: כ-64 דקות. שבו בנחת והתכוננו לנוף.</div>
+        <div class="highlight-box">💡 <strong>טיפ חובה:</strong> לשבת בצד שמאל של כיוון הנסיעה כדי ליהנות מקו המים והנוף הפתוח כשהרכבת מגיעה לאגם!</div>
+      </div>
+
+      <!-- 11:24 - 13:00 -->
+      <div class="timeline-item" data-start="11:24" data-end="13:00">
+        <div class="timeline-header">
+          <div class="item-time">11:24 עד 13:00 | וארנה (חלק 1)</div>
+          <input type="checkbox" class="item-checkbox" id="step-3" onchange="saveProgress()">
+        </div>
+        <div class="item-title">סיבוב ראשון בווארנה באור יום</div>
+        <div class="item-desc">יורדים לכיוון קו המים (אין עצירת אוכל כעת, שבעים מארוחת הבוקר). מסלול הליכה וצילום:</div>
+        <div class="item-desc">
+          - טיילת האוהבים (Passeggiata degli Innamorati) עם המעקה האדום<br>
+          - הנמל הישן והבתים הצבעוניים מול האגם<br>
+          - סמטאות האבן המובילות למים<br>
+          - Piazza San Giorgio (חזית כנסייה בהירה ונקייה)
+        </div>
+      </div>
+
+      <!-- 13:00 - 13:35 -->
+      <div class="timeline-item" data-start="13:00" data-end="13:35">
+        <div class="timeline-header">
+          <div class="item-time">13:00 עד 13:35 | מעבורת</div>
+          <input type="checkbox" class="item-checkbox" id="step-4" onchange="saveProgress()">
+        </div>
+        <div class="item-title">התייצבות ברציף ושיט לבלאג'יו</div>
+        <div class="item-desc">להגיע לקופה כ-20 דקות לפני (ב-13:00). <strong>טיפ:</strong> לקנות כבר כרטיס הלוך-חזור כדי לחסוך תור ארוך בחזור!</div>
+        <div class="highlight-box">📸 <strong>צילום ב-13:20:</strong> לשבת בחלק החיצוני של המעבורת ולצלם את וארנה מתרחקת מקו המים.</div>
+      </div>
+
+      <!-- 13:35 - 16:25 -->
+      <div class="timeline-item" data-start="13:35" data-end="16:25">
+        <div class="timeline-header">
+          <div class="item-time">13:35 עד 16:25 | בלאג'יו (לב היום)</div>
+          <input type="checkbox" class="item-checkbox" id="step-5" onchange="saveProgress()">
+        </div>
+        <div class="item-title">שיטוט וצילומים בבלאג'יו</div>
+        <div class="item-desc">
+          - <strong>13:35-13:55:</strong> הטיילת והנמל, סירות והרים.<br>
+          - <strong>13:55-14:15:</strong> <em>Salita Serbelloni</em> (מדרגות חובה קלאסיות).<br>
+          - <strong>14:15-14:35:</strong> כנסיית Basilica di San Giacomo וסביבתה.<br>
+          - <strong>14:35-15:30:</strong> <em>Punta Spartivento</em> – תצפית פנורמית על 3 זרועות האגם וצילומי זוג.<br>
+          - <strong>15:30-16:15:</strong> סמטאות, Grand Hotel Villa Serbelloni וקפה זריז.
+        </div>
+      </div>
+
+      <!-- 16:25 - 17:00 -->
+      <div class="timeline-item" data-start="16:25" data-end="17:00">
+        <div class="timeline-header">
+          <div class="item-time">16:25 עד 17:00 | מעבורת שקיעה</div>
+          <input type="checkbox" class="item-checkbox" id="step-6" onchange="saveProgress()">
+        </div>
+        <div class="item-title">מעבורת חזרה לווארנה (Golden Hour)</div>
+        <div class="item-desc">התייצבות ברציף ב-16:25. הפלגה ב-16:45. צילום בלאג'יו מהמים באור השקיעה הרך.</div>
+      </div>
+
+      <!-- 17:00 - 18:45 -->
+      <div class="timeline-item" data-start="17:00" data-end="18:45">
+        <div class="timeline-header">
+          <div class="item-time">17:00 עד 18:45 | וארנה בדמדומים</div>
+          <input type="checkbox" class="item-checkbox" id="step-7" onchange="saveProgress()">
+        </div>
+        <div class="item-title">סיבוב ערב קסום + מאפייה</div>
+        <div class="item-desc">
+          - הנמל והטיילת באור ערב ורוד-זהוב עם הפנסים שנדלקים.<br>
+          - השלמת סמטאות ומדרגות ציוריות.<br>
+          - <strong>Lake Bakery (לפני 18:30):</strong> פוקאצ'ה בצל, קנולי פיסטוק או מריטוצו!
+        </div>
+      </div>
+
+      <!-- 18:45 ואילך -->
+      <div class="timeline-item" data-start="18:45" data-end="20:30">
+        <div class="timeline-header">
+          <div class="item-time">18:45 ואילך | חזרה למילאנו</div>
+          <input type="checkbox" class="item-checkbox" id="step-8" onchange="saveProgress()">
+        </div>
+        <div class="item-title">עלייה לתחנה וחזרה ברכבת</div>
+        <div class="item-desc">העלייה מ-Lake Bakery לתחנת Varenna-Esino לוקחת כ-10-15 דקות בעלייה מתונה. בדיקת רכבת ישירה קרובה ב-Trenord ונסיעה רגועה למילאנו.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: PHOTOS -->
+  <div id="tab-photos" class="content-pane">
+    <div class="photo-filter">
+      <div class="filter-chip active" onclick="filterPhotos('all', this)">הכל</div>
+      <div class="filter-chip" onclick="filterPhotos('must', this)">⭐ ספוטי חובה</div>
+      <div class="filter-chip" onclick="filterPhotos('white', this)">🤍 רקע בהיר</div>
+      <div class="filter-chip" onclick="filterPhotos('view', this)">🌊 נוף פתוח</div>
+    </div>
+
+    <div class="photo-card" data-cat="must view">
+      <span class="spot-badge badge-must">ספוט חובה #1</span>
+      <span class="spot-badge badge-view">נוף פתוח</span>
+      <h3>Passeggiata degli Innamorati • וארנה</h3>
+      <p class="item-desc">שביל הטיילת האדומה הצמוד לסלע מעל המים. לעצור בכמה מפרצים לצילום עם בתי וארנה מאחור. מומלץ גם בבוקר וגם בדמדומים באור רך.</p>
+    </div>
+
+    <div class="photo-card" data-cat="must">
+      <span class="spot-badge badge-must">ספוט חובה #2</span>
+      <h3>Salita Serbelloni • בלאג'יו</h3>
+      <p class="item-desc">המדרגות והסמטה הכי מפורסמת באגם. <strong>זווית מומלצת:</strong> לצלם מלמטה כלפי מעלה עם חבלי התלייה והחנויות, ומלמעלה כלפי מטה כשהאגם מציץ ברקע.</p>
+    </div>
+
+    <div class="photo-card" data-cat="must view">
+      <span class="spot-badge badge-must">ספוט חובה #3</span>
+      <span class="spot-badge badge-view">נוף פתוח</span>
+      <h3>Punta Spartivento • בלאג'יו</h3>
+      <p class="item-desc">שפיץ היבשה המפצל את האגם לשלושת ענפיו. המקום המושלם לתמונות זוגיות פנורמיות ולתמונות אנכיות עם ספסלי האבן והעצים על קו המים.</p>
+    </div>
+
+    <div class="photo-card" data-cat="white">
+      <span class="spot-badge badge-white">רקע בהיר / נקי</span>
+      <h3>Piazza San Giorgio • וארנה</h3>
+      <p class="item-desc">כיכר פתוחה ומרגיעה. חזית אבן בהירה של הכנסייה העתיקה שמעניקה קו נקי ומינימליסטי בלי עומס של חנויות.</p>
+    </div>
+
+    <div class="photo-card" data-cat="white">
+      <span class="spot-badge badge-white">רקע בהיר / נקי</span>
+      <h3>Basilica di San Giacomo • בלאג'יו</h3>
+      <p class="item-desc">אבני רומנסק עתיקות וכיכר אבן שקטה. רקע בהיר וקלאסי לצילום פורטרט אלגנטי.</p>
+    </div>
+
+    <div class="photo-card" data-cat="white view">
+      <span class="spot-badge badge-white">רקע אלגנטי</span>
+      <span class="spot-badge badge-view">נוף פתוח</span>
+      <h3>Grand Hotel Villa Serbelloni</h3>
+      <p class="item-desc">חזית צהובה-שמנת יוקרתית וטיילת מטופחת על קו המים. (גישה בכפוף לפתיחה ומבקרים מבחוץ).</p>
+    </div>
+  </div>
+
+  <!-- TAB 3: MIRI & BAKERY -->
+  <div id="tab-bakery" class="content-pane">
+    <div class="italian-card">
+      <div style="font-size: 0.8rem; font-weight: 700; color: var(--terracotta);">כרטיס הצגה מהיר למירי באיטלקית</div>
+      <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">בדיקת כשרות / הימנעות מחזיר ושומן חזיר</div>
+
+      <div class="phrase-it" id="italian-phrase">
+        "Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?"
+      </div>
+
+      <div class="action-btn-row">
+        <button class="pill-btn btn-sound" onclick="playItalianSpeech()">
+          🔊 השמע באיטלקית
+        </button>
+        <button class="pill-btn btn-copy" onclick="copyPhrase()">
+          📋 העתק טקסט
+        </button>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <h3>🥐 Lake Bakery Varenna</h3>
+      <div class="item-desc">פתוחה עד 19:00 (להגיע לפני 18:30). תחנת החובה של סוף היום לפני העלייה לרכבת.</div>
+      <div class="highlight-box">
+        <strong>מה מומלץ לקחת:</strong><br>
+        - <strong>מלוח:</strong> פוקאצ'ה בצל מעולה וטרייה.<br>
+        - <strong>מתוק:</strong> קנולי עם קרם פיסטוק עשיר או מריטוצו איטלקי.<br>
+        - מומלץ לחלוק מלוח ומתוק יחד!
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: VERIFY & MAPS -->
+  <div id="tab-verify" class="content-pane">
+    <div class="photo-card">
+      <h3>🔍 בדיקות זמן אמת נדרשות:</h3>
+      <div class="item-desc">
+        - רכבת 10:20 מ-Milano Centrale ואימות הרציף בלוח התחנה.<br>
+        - מעבורת 13:20 מווארנה לבלאג'יו.<br>
+        - מעבורת 16:45 מבלאג'יו לווארנה (מעבורת השקיעה).<br>
+        - שעת הרכבת הישירה מ-Varenna-Esino חזרה למילאנו.
+      </div>
+    </div>
+
+    <div class="verify-grid">
+      <div class="verify-item">
+        <a href="https://www.trenord.it/" target="_blank">
+          <span style="font-size:1.5rem;">🚆</span>
+          <span>לוחות Trenord</span>
+        </a>
+      </div>
+      <div class="verify-item">
+        <a href="https://www.navigazionelaghi.it/" target="_blank">
+          <span style="font-size:1.5rem;">🚢</span>
+          <span>מעבורות האגם</span>
+        </a>
+      </div>
+      <div class="verify-item">
+        <a href="https://maps.google.com/?q=Varenna" target="_blank">
+          <span style="font-size:1.5rem;">🗺️</span>
+          <span>מפת וארנה</span>
+        </a>
+      </div>
+      <div class="verify-item">
+        <a href="https://maps.google.com/?q=Bellagio" target="_blank">
+          <span style="font-size:1.5rem;">🗺️</span>
+          <span>מפת בלאג'יו</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-bar">
+    <button class="nav-link active" onclick="switchTab('itinerary', this)">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+      לו"ז היום
+    </button>
+    <button class="nav-link" onclick="switchTab('photos', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0 3.2 3.2 0 1 0 -6.4 0M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9z"/></svg>
+      ספוטי צילום
+    </button>
+    <button class="nav-link" onclick="switchTab('bakery', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      מירי & מאפה
+    </button>
+    <button class="nav-link" onclick="switchTab('verify', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      ניווט ואימות
+    </button>
+  </div>
+
+  <script>
+    // Service Worker Registration for PWA Offline capability
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered', reg))
+          .catch(err => console.log('SW Registration failed', err));
+      });
+    }
+
+    // PWA Install Prompt Handling
+    let deferredPrompt;
+    const installBanner = document.getElementById('installBanner');
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBanner.classList.add('visible');
+    });
+
+    installBtn.addEventListener('click', () => {
+      installBanner.classList.remove('visible');
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          deferredPrompt = null;
+        });
+      }
+    });
+
+    // Check if running in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      installBanner.style.display = 'none';
+    }
+
+    // Tab Switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.content-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+
+      const matchingTabBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+      if (matchingTabBtn) matchingTabBtn.classList.add('active');
+
+      if (btn && btn.classList.contains('nav-link')) {
+        btn.classList.add('active');
+      } else {
+        const matchingNav = Array.from(document.querySelectorAll('.nav-link')).find(b => b.getAttribute('onclick')?.includes(tabId));
+        if (matchingNav) matchingNav.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Photo Filtering
+    function filterPhotos(cat, chip) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      document.querySelectorAll('.photo-card').forEach(card => {
+        if (!card.dataset.cat) return;
+        if (cat === 'all' || card.dataset.cat.includes(cat)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Italian Audio Speech (Web Speech API)
+    function playItalianSpeech() {
+      const text = "Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?";
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'it-IT';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("תכונת ההקראה אינה נתמכת בדפדפן זה.");
+      }
+    }
+
+    // Copy Italian Phrase
+    function copyPhrase() {
+      const text = "Non mangiamo maiale. Questo contiene prosciutto, salame o strutto?";
+      navigator.clipboard.writeText(text).then(() => {
+        alert("המשפט הועתק ללוח!");
+      });
+    }
+
+    // Local Storage Checkboxes
+    function saveProgress() {
+      const checks = {};
+      document.querySelectorAll('.item-checkbox').forEach(cb => {
+        checks[cb.id] = cb.checked;
+        const item = cb.closest('.timeline-item');
+        if (cb.checked) {
+          item.classList.add('completed');
+        } else {
+          item.classList.remove('completed');
+        }
+      });
+      localStorage.setItem('como_trip_progress', JSON.stringify(checks));
+      checkDelayStatus();
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('como_trip_progress');
+      if (saved) {
+        const checks = JSON.parse(saved);
+        Object.keys(checks).forEach(id => {
+          const cb = document.getElementById(id);
+          if (cb) {
+            cb.checked = checks[id];
+            if (cb.checked) cb.closest('.timeline-item').classList.add('completed');
+          }
+        });
+      }
+    }
+
+    // Real-Time Clock & Stage Detection
+    function updateClockAndStage() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const curTime = `${hours}:${mins}`;
+      document.getElementById('clock-display').textContent = curTime;
+
+      // Find active stage
+      let currentStageName = "התארגנות במלון / יציאה לדרך";
+      let activeItemFound = false;
+
+      const items = document.querySelectorAll('.timeline-item');
+      items.forEach(item => {
+        const start = item.dataset.start;
+        const end = item.dataset.end;
+        if (start && end) {
+          if (curTime >= start && curTime < end) {
+            item.classList.add('current-step');
+            currentStageName = item.querySelector('.item-title').innerText;
+            activeItemFound = true;
+          } else {
+            item.classList.remove('current-step');
+          }
+        }
+      });
+
+      if (!activeItemFound && curTime >= '18:45') {
+        currentStageName = "ערב במילאנו / חזרה למלון";
+      }
+
+      document.getElementById('current-stage-title').textContent = currentStageName;
+      checkDelayStatus();
+    }
+
+    // Delay Detection
+    function checkDelayStatus() {
+      const now = new Date();
+      const curTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const indicator = document.getElementById('delay-indicator');
+
+      let isDelayed = false;
+      document.querySelectorAll('.timeline-item').forEach(item => {
+        const end = item.dataset.end;
+        const cb = item.querySelector('.item-checkbox');
+        if (end && curTime > end && cb && !cb.checked) {
+          isDelayed = true;
+        }
+      });
+
+      if (isDelayed) {
+        indicator.textContent = 'שים לב: ייתכן עיכוב בלו"ז';
+        indicator.className = 'delay-pill delay-warn';
+      } else {
+        indicator.textContent = 'עומדים בזמנים';
+        indicator.className = 'delay-pill delay-ok';
+      }
+    }
+
+    // GPS Geolocation
+    function requestUserLocation() {
+      const locDisplay = document.getElementById('loc-display');
+      if (!navigator.geolocation) {
+        locDisplay.textContent = 'GPS אינו נתמך';
+        return;
+      }
+      locDisplay.textContent = 'מזהה מיקום...';
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          if (lat >= 45.95 && lat <= 46.05 && lon >= 9.25 && lon <= 9.35) {
+            locDisplay.textContent = 'אגם קומו (וארנה / בלאג'יו)';
+          } else if (lat >= 45.43 && lat <= 45.54 && lon >= 9.12 && lon <= 9.30) {
+            locDisplay.textContent = 'מילאנו (Milano)';
+          } else {
+            locDisplay.textContent = `${lat.toFixed(2)}N, ${lon.toFixed(2)}E`;
+          }
+        },
+        () => {
+          locDisplay.textContent = 'לחץ להפעלת GPS';
+        }
+      );
+    }
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProgress();
+      updateClockAndStage();
+      setInterval(updateClockAndStage, 10000);
+      requestUserLocation();
+    });
+  </script>
+</body>
+</html>
